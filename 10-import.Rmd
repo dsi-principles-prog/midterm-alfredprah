@@ -1,0 +1,109 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Trending YouTube Video Statistics
+
+YouTube (the world-famous video sharing website) maintains a list of the top trending videos on the platform. This dataset includes the YouTube video title, channel title, publish time, tags, views, likes and dislikes, description, and comment count. My goal is to use the available data about trending videos to predict the day and time of the week that has the most trending videos.
+
+## Definitions of variables:
+
+video_id - this is pre-determined by YouTube. For the purposes of my predictive model, it is not a parameter to worry about. 
+
+trending_date - This refers to the date a particular YouTube video was "trending" 
+
+title - This refers to the title assigned to a YouTube video by the people uploading it to their channel. 
+
+channel_title - This refers to the name of the channel the YouTube video is being uploaded through. 
+
+category_id - This refers to the category that a YouTube video falls into. 
+
+publish_time - This refers to the time that the YouTube video was published on the channel. 
+
+tags - Tags are words and phrases used to give YouTube viewers and algorithms context about a video. 
+
+views - This refers to the number of people who watch a particular video. 
+
+likes - This refers to the number of people who vote a video up. Ie, they click on the "thumbs up" icon underneath the video. 
+
+dislikes - This refers to the number of people who vote a video down. Ie, they click on the "thumbs down" icon underneath the video.
+
+comment_count - This refers to how many comments a particular video received from its viewers. 
+
+thumbnail_link - This refers to the picture that was used a "cover photo" for the uploaded video. 
+
+comments_disabled - This column provides an account of videos that had the comment function disabled. 
+
+ratings_disabled - This refers to whether a channel gives its viewers the opportunity to vote a video up or down.
+
+video_error_or_removed - This refers to whether the formerly known link to a video has been changed/removed, or whether there is any error in accessing the video content. 
+
+description - This refers to video descriptions that channel owners use to preview their video to prospective viewers. 
+
+## Predictive Modeling Problem
+I would like to predict the day and time of the week that has the most trending videos.
+
+
+## libraries
+```{r libraries, warning=FALSE, message=FALSE}
+library(readr)
+library(lubridate)
+library(tidyverse)
+library(assertr)
+library(janitor)
+library(chron)
+```
+
+## Data Import 
+```{r import the data set, warning=FALSE, message=FALSE}
+video_statistics <- read_csv("USvideos.csv")
+```
+
+## Data Inspection
+```{r data inspection, warning=FALSE, message=FALSE}
+str(video_statistics)
+dim(video_statistics)
+video_statistics
+```
+
+## Data Testing
+```{r data testing: check for NA values in all columns}
+video_statistics %>%
+  assert(not_na, everything())  # check whether there are NA values
+```
+assetr stopped execution because there are 578 NA values in the "description" column. This is good information and something I would take into account, going forward.
+
+
+```{r data testing: check for "TRUE" or "FALSE in the "comments_disabled" column}
+#check to see if the values of this column are either TRUE or FALSE, exclusively. 
+assert(video_statistics, in_set("FALSE", "TRUE"), comments_disabled)  
+```
+assetr did not stop execution. This means that the "comments_disabled" column contains only True or False values. 
+
+```{r data testing: check for "TRUE" or "FALSE in the "ratings_disabled" column}
+#check to see if the values of this column are either TRUE or FALSE, exclusively.
+assert(video_statistics, in_set("FALSE", "TRUE"), ratings_disabled)  
+```
+assetr did not stop execution. This means that the "ratings_disabled" column contains only True or False values.
+
+```{r data testing: check for "TRUE" or "FALSE in the "video_error_or_removed" column}
+##check to see if the values of this column are either TRUE or FALSE, exclusively.
+assert(video_statistics, in_set("FALSE", "TRUE"), video_error_or_removed)  
+```
+assetr did not stop execution. This means that the "video_error_or_removed" column contains only True or False values.
+
+## Data Cleaning
+```{r data cleaning: change TRUE or FALSE values in "comments_disabled" to T or F}
+video_statistics <- video_statistics %>%
+  mutate(comments_disabled = substring(comments_disabled, 1, 1))
+```
+
+```{r data cleaning: change TRUE or FALSE values in "ratings_disabled" to T or F}
+video_statistics <- video_statistics %>%
+  mutate(ratings_disabled = substring(ratings_disabled, 1, 1))
+```
+
+```{r data cleaning: change TRUE or FALSE values in "video_error_or_removed" to T or F}
+video_statistics <- video_statistics %>%
+  mutate(video_error_or_removed = substring(video_error_or_removed, 1, 1))
+```
