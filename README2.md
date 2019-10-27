@@ -8,5 +8,6 @@ that trend in the United States of America: "USvideos.csv"
 
 My goal is to use the available data to predict the day and time of the week that has the most trending videos.
 
-## Data Source:
-[Kaggle](https://www.kaggle.com/datasnaek/youtube-new)<br>
+## Data Source
+Kaggle:
+[YouTube Trending Video Statistics](https://www.kaggle.com/datasnaek/youtube-new)<br>
