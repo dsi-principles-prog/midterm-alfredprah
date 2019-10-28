@@ -3,8 +3,6 @@ title: "30-feature-engineering"
 output: html_notebook
 ---
 
-
-
 ### Feature engineering
 Assign values for the day of the week that each video in the data set was uploaded. The goal is to use this feature to determine if the day of the week of upload has any effect on the possible popularity of a video in the U.S.
 
@@ -72,7 +70,7 @@ video_statistics %>%
 ### feature engineering
 This feature assigns binary values (0 or 1) to the time of day that a video was uploaded. If a video was uploaded in the morning, a value will be recorded in the column " morning", for the row that corresponds to the video being investigated. This will allow us to use the times of days that correspond to the different vidoes as inputs, since most machine-learning models are unable to take in strings as inputs.
 
-```{r}
+```{r feature engineering: assign binary values to the time of day of upload}
 assign_binary_values_to_time_of_day_of_upload <- function(df){
   df %>% 
     mutate(
@@ -96,4 +94,18 @@ video_statistics %>%
   select(morning, afternoon, evening, night) %>% 
   assert(within_bounds(0,1))
 ```
+### Include the target variable, "duration_trending"
+This function calculates the number of days that a video trends for, and creates a new variable "duration_trending", the column I am trying to predict.
+```{r predictive column from training data}
+number_of_days_trending <- function(df) {
+  df %>%
+    group_by(video_id) %>%
+    mutate(duration_trending = n()) %>% 
+    ungroup()
+}
 
+#test predictive column≥
+video_statistics %>% 
+  number_of_days_trending() %>% 
+  assert(within_bounds(1,50), duration_trending)
+```
