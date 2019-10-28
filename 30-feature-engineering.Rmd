@@ -1,0 +1,99 @@
+---
+title: "30-feature-engineering"
+output: html_notebook
+---
+
+
+
+### Feature engineering
+Assign values for the day of the week that each video in the data set was uploaded. The goal is to use this feature to determine if the day of the week of upload has any effect on the possible popularity of a video in the U.S.
+
+The output for each row will be an integer value within the bounds of 1 and 7, where 1 means the video was uploaded on a Sunday and 7 means the video was uploaded on a Saturday. Call this new function, "assign_values_to_days_of_the_week". 
+
+```{r feature engineering: add a column for the day of the week that each video was uploaded}
+#type feature-engineering code here
+
+
+
+
+#test new feature here
+
+```
+
+
+### Feature engineering 
+Separate the time of upload into an entirely new column that has values for each video's Hour of upload, Minute of upload, and second of upload. The outputs would have the format: "%H:%M:%S". Call this new function, "time_of_upload". 
+
+```{r feature engineering: separate the time of upload into a new column for further analysis}
+#type feature-engineering code here
+
+
+
+
+#test new feature here
+
+```
+
+### Feature engineering 
+Assign Morning, Afternoon, Evening, Night to the 24 HOURS in a single day. This feature will all a column that will later be used to assign binary values to the time of day that each video was uploaded. Through it, I will be on my way to determining if the time of day of uploading a YouTube video will affect the duration of popularity of a video, in the long run.   
+
+I pre-determined the 4 different intervals that correspond to different times of day: 
+Morning: 5:00:00 AM - 11:59:59 AM 
+Afternoon: 12:00:00 PM - 16:59:59 PM
+Evening: 17:00:00 PM - 20:59:59 PM
+Night: 21:00:00 PM - 4:59 AM
+
+```{r feature engineering: assign time of day to "upload_time", warning=FALSE, message=FALSE}
+time_of_day_of_upload <- function (df) {
+  df %>%
+    mutate(
+      time_of_day <<- case_when(
+        as_datetime(hms(upload_time)) %within% interval(as_datetime(hms("5:00:00")), as_datetime(hms("11:59:59"))) ~
+          "morning",
+        as_datetime(hms(upload_time)) %within% interval(as_datetime(hms("12:00:00")), as_datetime(hms("16:59:59"))) ~
+          "afternoon",
+        as_datetime(hms(upload_time)) %within% interval(as_datetime(hms("17:00:00")), as_datetime(hms("20:59:59"))) ~
+          "evening",
+        as_datetime(hms(upload_time)) %within% interval(as_datetime(hms("21:00:00")), as_datetime(hms("23:59:59"))) ~
+          "night",
+        as_datetime(hms(upload_time)) %within% interval(as_datetime(hms("00:00:00")), as_datetime(hms("4:59:59"))) ~
+          "night"
+      )
+    )
+}
+
+
+#test new feature: Are the newly created time intervals: "morning", "afternoon", "evening", "night" available in the data set and returned as outputs as intended? 
+video_statistics %>% 
+  time_of_day_of_upload() %>% 
+  assert(in_set("morning", "afternoon", "evening", "night"))
+```
+
+### feature engineering
+This feature assigns binary values (0 or 1) to the time of day that a video was uploaded. If a video was uploaded in the morning, a value will be recorded in the column " morning", for the row that corresponds to the video being investigated. This will allow us to use the times of days that correspond to the different vidoes as inputs, since most machine-learning models are unable to take in strings as inputs.
+
+```{r}
+assign_binary_values_to_time_of_day_of_upload <- function(df){
+  df %>% 
+    mutate(
+    # Create morning column
+    morning = ifelse(time_of_day == "morning", 1, 0),
+    
+    # Create afternoon column
+    afternoon = ifelse(time_of_day == "afternoon", 1, 0),
+    
+    # Create evening column
+    evening = ifelse(time_of_day == "evening", 1, 0),
+    
+    #create night column
+    night = ifelse(time_of_day == "night", 1, 0)
+  )
+}
+
+#Test new feature: does each newly-created column strictly contain a 1 or a 0?
+video_statistics %>% 
+  assign_binary_values_to_time_of_day_of_upload() %>% 
+  select(morning, afternoon, evening, night) %>% 
+  assert(within_bounds(0,1))
+```
+
