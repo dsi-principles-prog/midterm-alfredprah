@@ -1,12 +1,23 @@
 ---
-title: "R Notebook"
+title: "10-import"
 output: html_notebook
 ---
 # Trending YouTube Video Statistics
 
-YouTube (the world-famous video sharing website) maintains a list of the top trending videos on the platform. This dataset includes the YouTube video title, channel title, publish time, tags, views, likes and dislikes, description, and comment count. My goal is to use the available data about trending videos to predict the day and time of the week that has the most trending videos.
+YouTube (the world-famous video sharing website) maintains a list of the top trending videos on the platform. This dataset includes the YouTube video title, channel title, publish time, tags, views, likes and dislikes, description, and comment count. My goal is to use the available data to predict the duration of popularity of a video. Ie, how long will a video that is currently trending in the U.S, remain on the list of trending videos? YouTube is a "numbers" game knowing this can help YouTubers to not only aspire to have their videos Trend, but to have them to Trend for as long as possible.
 
-## Definitions of variables:
+The parameters of interest are:
+ - category ID
+ - trending date
+ - publish time
+ - views
+ - likes
+ - dislikes
+ - comment_count
+ - comments_disabled
+ - ratings_disabled
+ 
+## Definitions of all 16 variables in the data set:
 
 video_id - this is pre-determined by YouTube. For the purposes of my predictive model, it is not a parameter to worry about. 
 
@@ -41,7 +52,7 @@ video_error_or_removed - This refers to whether the formerly known link to a vid
 description - This refers to video descriptions that channel owners use to preview their video to prospective viewers. 
 
 ## Predictive Modeling Problem
-I would like to predict the day and time of the week that has the most trending videos.
+I would like to predict how long a YouTube video remains on the list of Trending YouTube videos in the U.S.
 
 
 ## libraries
