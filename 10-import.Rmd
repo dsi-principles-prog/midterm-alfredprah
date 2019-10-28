@@ -104,17 +104,23 @@ assert(video_statistics, in_set("FALSE", "TRUE"), video_error_or_removed)
 ```
 assetr did not stop execution. This means that the "video_error_or_removed" column contains only True or False values.
 
-## Data Cleaning
+### Data Cleaning
+Change TRUE values to T, and FALSE values to F. This makes the columns more readily available for my machine-learning model.
 ```{r data cleaning: change TRUE or FALSE values in "comments_disabled" to T or F}
 video_statistics <- video_statistics %>%
   mutate(comments_disabled = substring(comments_disabled, 1, 1))
 ```
 
+
+### Data Cleaning
+Change TRUE values to T, and FALSE values to F. This makes the columns more readily available for my machine-learning model.
 ```{r data cleaning: change TRUE or FALSE values in "ratings_disabled" to T or F}
 video_statistics <- video_statistics %>%
   mutate(ratings_disabled = substring(ratings_disabled, 1, 1))
 ```
 
+
+Change TRUE values to T, and FALSE values to F. This makes the columns more readily available for my machine-learning model.
 ```{r data cleaning: change TRUE or FALSE values in "video_error_or_removed" to T or F}
 video_statistics <- video_statistics %>%
   mutate(video_error_or_removed = substring(video_error_or_removed, 1, 1))
