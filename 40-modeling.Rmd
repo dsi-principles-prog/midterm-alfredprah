@@ -1,0 +1,56 @@
+---
+title: "40-modeling"
+output: html_notebook
+---
+
+## Modeling
+
+It is time to prepare my data for modeling.
+
+The parameters of input are: 
+ - category ID
+ - trending date
+ - publish time
+ - views
+ - likes
+ - dislikes
+ - comment_count
+ - comments_disabled
+ - ratings_disabled
+ 
+ The new column I will be predicting is "duration". 
+ 
+ 
+### Add new features to the original data set: 
+```{r}
+video_statistics_prepared <- video_statistics %>%
+  assign_values_to_days_of_the_week() %>%
+  time_of_upload() %>%
+  time_of_day_of_upload() %>%
+  assign_binary_values_to_time_of_day_of_upload()
+```
+
+### Re-arrange columns and select parameters of interest 
+```{r}
+video_statistics_prepared <- video_statistics_prepared %>%
+  select (
+    week_day,
+    time_of_day,
+    morning,
+    afternoon,
+    evening,
+    night,
+    category_id,
+    views,
+    likes,
+    dislikes,
+    comment_count,
+    comments_disabled,
+    ratings_disabled
+  )
+
+
+#Inspect data:
+head(video_statistics_prepared)
+```
+
