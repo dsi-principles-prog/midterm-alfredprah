@@ -2,7 +2,7 @@
 title: "10-import"
 output: html_notebook
 ---
-# Trending YouTube Video Statistics
+# Trending YouTube Video Statistics 
 
 YouTube (the world-famous video sharing website) maintains a list of the top trending videos on the platform. This dataset includes the YouTube video title, channel title, publish time, tags, views, likes and dislikes, description, and comment count. My goal is to use the available data to predict the duration of popularity of a video. Ie, how long will a video that is currently trending in the U.S, remain on the list of trending videos? YouTube is a "numbers" game knowing this can help YouTubers to not only aspire to have their videos Trend, but to have them to Trend for as long as possible.
 
@@ -67,7 +67,8 @@ library(chron)
 
 ## Data Import 
 ```{r import the data set, warning=FALSE, message=FALSE}
-video_statistics <- read_csv("USvideos.csv")
+video_statistics <- read_csv("USvideos.csv") %>% 
+  clean_names()
 ```
 
 ## Data Inspection
