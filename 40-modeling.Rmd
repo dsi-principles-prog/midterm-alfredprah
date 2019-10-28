@@ -22,20 +22,28 @@ The parameters of input are:
  
  
 ### Add new features to the original data set: 
-```{r}
+```{r new data frame}
 video_statistics_prepared <- video_statistics %>%
-  assign_values_to_days_of_the_week() %>%
-  time_of_upload() %>%
+  #add feature engineering function here %>%
+  #add feature engineering function here %>% 
   time_of_day_of_upload() %>%
-  assign_binary_values_to_time_of_day_of_upload()
+  assert(in_set("morning", "afternoon", "evening", "night")) %>% 
+  assign_binary_values_to_time_of_day_of_upload() %>% 
+  assert(within_bounds(0,1)) %>% 
+  number_of_days_trending() %>% 
+  assert(within_bounds(1,50), duration_trending) %>% 
+
+
+  select(duration_trending, everything())
 ```
 
-### Re-arrange columns and select parameters of interest 
-```{r}
+
+
+### Re-arrange columns to have all parameters of interest in front
+```{r select columns/parameters of interest}
 video_statistics_prepared <- video_statistics_prepared %>%
   select (
-    week_day,
-    time_of_day,
+    duration_trending,
     morning,
     afternoon,
     evening,
@@ -46,11 +54,16 @@ video_statistics_prepared <- video_statistics_prepared %>%
     dislikes,
     comment_count,
     comments_disabled,
-    ratings_disabled
+    ratings_disabled, 
+    everything()
   )
 
 
 #Inspect data:
 head(video_statistics_prepared)
+```
+
+```{r csv file for new data frame}
+write.csv(video_statistics_prepared,"video_statistics_prepared.csv")
 ```
 
