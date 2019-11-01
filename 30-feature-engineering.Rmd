@@ -11,10 +11,17 @@ The output for each row will be an integer value within the bounds of 1 and 7, w
 ```{r feature engineering: add a column for the day of the week that each video was uploaded}
 #type feature-engineering code here
 
-
+assign_values_to_days_of_the_week <- function(df){
+  df %>%
+    mutate(days_of_the_week=wday(publish_time))
+    
+}
 
 
 #test new feature here
+video_statistics %>% 
+  assign_values_to_days_of_the_week() %>%
+  assert(in_set(1,2, 3, 4, 5, 6, 7),days_of_the_week)
 
 ```
 
